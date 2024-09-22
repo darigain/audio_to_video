@@ -1,8 +1,15 @@
 import streamlit as st
 import subprocess
+import requests
 from datetime import datetime
 import tempfile
 import os
+
+# Function to download file from Google Drive
+def download_from_google_drive(drive_url, output_path):
+    response = requests.get(drive_url)
+    with open(output_path, 'wb') as file:
+        file.write(response.content)
 
 # Function to replace audio in the video using ffmpeg
 def replace_audio_in_video(video_template_path, audio_file_path, output_file_path):
@@ -23,19 +30,27 @@ def replace_audio_in_video(video_template_path, audio_file_path, output_file_pat
 def main():
     st.title("Simple Audio to Video Converter App")
 
+    # Define Google Drive link (adjusted for direct download)
+    google_drive_link = "https://drive.google.com/uc?export=download&id=1R1KemckSVIyFHvI8DxXXCR8CkK0tLHSL"
+
+    # Temporary location to save the downloaded video template
+    video_template_path = os.path.join(tempfile.gettempdir(), "video_template.mp4")
+
+    # Download video template from Google Drive
+    st.info("Downloading video template...")
+    download_from_google_drive(google_drive_link, video_template_path)
+    st.success("Video template downloaded successfully!")
+
     # File upload for audio
     uploaded_file = st.file_uploader("Choose an audio file", type=["mp3", "m4a", "mp4"])
 
     if uploaded_file is not None:
         st.success("Audio file uploaded successfully!")
-        
-        # Save the uploaded file to a temporary file
+
+        # Save the uploaded audio file to a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as temp_audio_file:
             temp_audio_file.write(uploaded_file.read())
             audio_file_path = temp_audio_file.name
-        
-        # Path to the video template (You must upload or have it stored locally)
-        video_template_path = "video_template_3h.mp4"  # Ensure this file exists in the same directory
 
         # Get the current datetime for unique file naming
         current_time = datetime.now().strftime("%Y%m%d_%H%M%S")

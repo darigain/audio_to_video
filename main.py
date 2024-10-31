@@ -29,7 +29,11 @@ def replace_audio_in_video(video_template_path, audio_file_path, output_file_pat
 # Streamlit app
 def main():
     st.title("Simple Audio to Video Converter App")
-
+    st.write("")  # Adds a blank line (space)
+    multi = '''Quickly and easily convert your audio 🎵 files (MP3, M4A, MP4, MPEG4) into a video 🎞️ format, ready for YouTube uploads, with a pre-defined, low-quality background image throughout the video. Perfect for sharing recordings on YouTube without the need for complex video editing.
+    It’s fast and secure—since it’s a Streamlit app, none of your data is stored or saved. Just upload, convert, and download with peace of mind.
+    '''
+    st.markdown(multi)
     # Define Google Drive link (adjusted for direct download)
     google_drive_link = "https://drive.google.com/uc?export=download&id=1R1KemckSVIyFHvI8DxXXCR8CkK0tLHSL"
 
